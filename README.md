@@ -44,6 +44,11 @@ List of Contents
 	testscreen.c	contains main functions to run program on screen
 	testcurl.c		contains main functions to implement curl
 	makefile		contains functions to compile file	
-
+	puttysize.php		contain code to read and write post data
+	main.c			contain code to run sound file
+	sound.h		contains sound function declaration and related constant
+	sound.c		contains sound manipulation functions
 5. Copyright and Licensing information
 	This application follows GPLv2 copyright.
+6. Contact information
+	tranduyphat@gmail.com

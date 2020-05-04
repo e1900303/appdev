@@ -2,6 +2,7 @@
 #include <math.h>
 #include "sound.h"
 #include "screen.h"
+#include "comm.h"
 // fuction definitions
 WAVheader readwavhdr(FILE *fp){
 	WAVheader myh;
@@ -31,6 +32,8 @@ void wavdata(WAVheader h, FILE *fp){
 	// 5*16000 = 80000 samples, we want to display them into 160 bars
 	short samples[500]; 	// to read 500 samples from WAV file
 	int peaks=0, flag=0; 	// 1st value is to count, 2nd value to show that you are in a peak
+	double max=0.0;
+	char postdata[100];
 	for(int i=0; i<160; i++){
 		fread(samples, sizeof(samples), 1, fp);
 		double sum = 0.0;	//accumulate the sum
@@ -52,7 +55,13 @@ void wavdata(WAVheader h, FILE *fp){
 	else{ 
 		setfgcolor(WHITE);
 		flag = 0;
-	}	
+	}
+	if(max<1.0)
+		max=20*log10(re);
+	else{
+		if (20*log10(re)>max)
+			max=20*log10(re);
+	}
 	drawbar(i+1, (int)20*log10(re)/3);
 #endif
 	}
@@ -63,6 +72,8 @@ void wavdata(WAVheader h, FILE *fp){
 	printf("Duration: %f s\n", (float)h.subchunk2size/h.byteRate);
 	gotoXY(1,150);
 	printf("Peaks: %d\n", peaks);
+	sprintf(postdata, "Peaks=%d&MaxdB=%lf", peaks, max);
+	sendpost(URL, postdata);
 }
 
 // end of file
